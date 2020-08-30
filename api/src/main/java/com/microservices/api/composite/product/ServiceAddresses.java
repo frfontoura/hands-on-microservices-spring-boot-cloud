@@ -1,7 +1,9 @@
 package com.microservices.api.composite.product;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Data
 public class ServiceAddresses {
     private final String cmp;
@@ -15,5 +17,5 @@ public class ServiceAddresses {
         rev = null;
         rec = null;
     }
-    
+
 }

@@ -1,7 +1,9 @@
 package com.microservices.api.core.recommendation;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Data
 public class Recommendation {
     private final int productId;

@@ -1,7 +1,9 @@
 package com.microservices.api.core.review;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Data
 public class Review {
     private final int productId;
