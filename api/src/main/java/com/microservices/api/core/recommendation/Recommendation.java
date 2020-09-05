@@ -1,10 +1,5 @@
 package com.microservices.api.core.recommendation;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@Data
 public class Recommendation {
     private final int productId;
     private final int recommendationId;
@@ -22,4 +17,36 @@ public class Recommendation {
         serviceAddress = null;
     }
 
+    public Recommendation(final int productId, final int recommendationId, final String author, final int rate, final String content, final String serviceAddress) {
+        this.productId = productId;
+        this.recommendationId = recommendationId;
+        this.author = author;
+        this.rate = rate;
+        this.content = content;
+        this.serviceAddress = serviceAddress;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public int getRecommendationId() {
+        return recommendationId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getRate() {
+        return rate;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getServiceAddress() {
+        return serviceAddress;
+    }
 }

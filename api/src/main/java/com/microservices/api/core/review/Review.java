@@ -1,10 +1,5 @@
 package com.microservices.api.core.review;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@Data
 public class Review {
     private final int productId;
     private final int reviewId;
@@ -22,4 +17,36 @@ public class Review {
         serviceAddress = null;
     }
 
+    public Review(final int productId, final int reviewId, final String author, final String subject, final String content, final String serviceAddress) {
+        this.productId = productId;
+        this.reviewId = reviewId;
+        this.author = author;
+        this.subject = subject;
+        this.content = content;
+        this.serviceAddress = serviceAddress;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public int getReviewId() {
+        return reviewId;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getServiceAddress() {
+        return serviceAddress;
+    }
 }

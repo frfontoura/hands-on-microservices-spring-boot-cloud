@@ -4,21 +4,25 @@ import com.microservices.api.core.review.Review;
 import com.microservices.api.core.review.ReviewController;
 import com.microservices.util.exceptions.InvalidInputException;
 import com.microservices.util.http.ServiceUtil;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 public class ReviewControllerImpl implements ReviewController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReviewControllerImpl.class);
 
     private final ServiceUtil serviceUtil;
+
+    @Autowired
+    public ReviewControllerImpl(final ServiceUtil serviceUtil) {
+        this.serviceUtil = serviceUtil;
+    }
 
     @Override
     public List<Review> getReviews(final int productId) {

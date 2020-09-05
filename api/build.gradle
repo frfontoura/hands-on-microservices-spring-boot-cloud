@@ -1,17 +1,17 @@
 buildscript {
-	ext {
-		springBootVersion = '2.3.2.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.3.2.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 plugins {
-	id "io.spring.dependency-management" version "1.0.9.RELEASE"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
 }
 
 
@@ -23,14 +23,12 @@ version = '1.0.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-	implementation('org.springframework.boot:spring-boot-starter-webflux')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
+    implementation('org.springframework.boot:spring-boot-starter-webflux')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
 dependencyManagement {

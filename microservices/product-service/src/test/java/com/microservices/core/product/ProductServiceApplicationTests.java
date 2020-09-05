@@ -1,4 +1,5 @@
-package com.microservices.core.review;
+package com.microservices.core.product;
+
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,83 +15,69 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class ReviewServiceApplicationTests {
+public class ProductServiceApplicationTests {
 
     @Autowired
     private WebTestClient client;
 
     @Test
-    public void getReviewsByProductId() {
+    public void getProductById() {
 
         final int productId = 1;
 
         client.get()
-                .uri("/review?productId=" + productId)
+                .uri("/product/" + productId)
                 .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.length()").isEqualTo(3)
-                .jsonPath("$[0].productId").isEqualTo(productId);
+                .jsonPath("$.productId").isEqualTo(productId);
     }
 
     @Test
-    public void getReviewsMissingParameter() {
+    public void getProductInvalidParameterString() {
 
         client.get()
-                .uri("/review")
+                .uri("/product/no-integer")
                 .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isEqualTo(BAD_REQUEST)
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.path").isEqualTo("/review")
-                .jsonPath("$.message").isEqualTo("Required int parameter 'productId' is not present");
-    }
-
-    @Test
-    public void getReviewsInvalidParameter() {
-
-        client.get()
-                .uri("/review?productId=no-integer")
-                .accept(APPLICATION_JSON)
-                .exchange()
-                .expectStatus().isEqualTo(BAD_REQUEST)
-                .expectHeader().contentType(APPLICATION_JSON)
-                .expectBody()
-                .jsonPath("$.path").isEqualTo("/review")
+                .jsonPath("$.path").isEqualTo("/product/no-integer")
                 .jsonPath("$.message").isEqualTo("Type mismatch.");
     }
 
     @Test
-    public void getReviewsNotFound() {
+    public void getProductNotFound() {
 
-        final int productIdNotFound = 213;
+        final int productIdNotFound = 13;
 
         client.get()
-                .uri("/review?productId=" + productIdNotFound)
+                .uri("/product/" + productIdNotFound)
                 .accept(APPLICATION_JSON)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus().isNotFound()
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.length()").isEqualTo(0);
+                .jsonPath("$.path").isEqualTo("/product/" + productIdNotFound)
+                .jsonPath("$.message").isEqualTo("No product found for productId: " + productIdNotFound);
     }
 
     @Test
-    public void getReviewsInvalidParameterNegativeValue() {
+    public void getProductInvalidParameterNegativeValue() {
 
         final int productIdInvalid = -1;
 
         client.get()
-                .uri("/review?productId=" + productIdInvalid)
+                .uri("/product/" + productIdInvalid)
                 .accept(APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isEqualTo(UNPROCESSABLE_ENTITY)
                 .expectHeader().contentType(APPLICATION_JSON)
                 .expectBody()
-                .jsonPath("$.path").isEqualTo("/review")
+                .jsonPath("$.path").isEqualTo("/product/" + productIdInvalid)
                 .jsonPath("$.message").isEqualTo("Invalid productId: " + productIdInvalid);
     }
 }

@@ -9,18 +9,24 @@ import com.microservices.composite.product.factory.ProductAggregateFactory;
 import com.microservices.composite.product.integration.ProductCompositeIntegration;
 import com.microservices.util.exceptions.NotFoundException;
 import com.microservices.util.http.ServiceUtil;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 public class ProductCompositeControllerImpl implements ProductCompositeController {
 
     private final ServiceUtil serviceUtil;
     private final ProductCompositeIntegration integration;
     private final ProductAggregateFactory productAggregateFactory;
+
+    @Autowired
+    public ProductCompositeControllerImpl(final ServiceUtil serviceUtil, final ProductCompositeIntegration integration, final ProductAggregateFactory productAggregateFactory) {
+        this.serviceUtil = serviceUtil;
+        this.integration = integration;
+        this.productAggregateFactory = productAggregateFactory;
+    }
 
     @Override
     public ProductAggregate getProduct(final int productId) {
