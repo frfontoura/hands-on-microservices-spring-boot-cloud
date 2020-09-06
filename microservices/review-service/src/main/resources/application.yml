@@ -5,3 +5,17 @@ logging:
   level:
     root: INFO
     com.microservices: DEBUG
+
+api:
+  common:
+    version: 1.0.0
+    title: Review API
+    description: Review API
+    termsOfServiceUrl: TERMS OF SERVICE URL
+    license: License
+    licenseUrl: LICENSE URL
+
+    contact:
+      name: frfontoura
+      url: https://github.com/frfontoura
+      email: test@test.com
