@@ -25,13 +25,13 @@ public class ProductAggregateFactory {
         // 2. Copy summary recommendation info, if available
         final List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null :
                 recommendations.stream()
-                        .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate()))
+                        .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
                         .collect(Collectors.toList());
 
         // 3. Copy summary review info, if available
         final List<ReviewSummary> reviewSummaries = (reviews == null) ? null :
                 reviews.stream()
-                        .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject()))
+                        .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
                         .collect(Collectors.toList());
 
         // 4. Create info regarding the involved microservices addresses
