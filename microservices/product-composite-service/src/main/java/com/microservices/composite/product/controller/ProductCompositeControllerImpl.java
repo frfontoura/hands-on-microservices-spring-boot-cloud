@@ -1,11 +1,9 @@
 package com.microservices.composite.product.controller;
 
-import com.microservices.api.composite.product.ProductAggregate;
-import com.microservices.api.composite.product.ProductCompositeController;
+import com.microservices.api.composite.product.*;
 import com.microservices.api.core.product.Product;
 import com.microservices.api.core.recommendation.Recommendation;
 import com.microservices.api.core.review.Review;
-import com.microservices.composite.product.factory.ProductAggregateFactory;
 import com.microservices.composite.product.integration.ProductCompositeIntegration;
 import com.microservices.util.exceptions.NotFoundException;
 import com.microservices.util.http.ServiceUtil;
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class ProductCompositeControllerImpl implements ProductCompositeController {
@@ -23,18 +22,18 @@ public class ProductCompositeControllerImpl implements ProductCompositeControlle
 
     private final ServiceUtil serviceUtil;
     private final ProductCompositeIntegration integration;
-    private final ProductAggregateFactory productAggregateFactory;
 
     @Autowired
-    public ProductCompositeControllerImpl(final ServiceUtil serviceUtil, final ProductCompositeIntegration integration, final ProductAggregateFactory productAggregateFactory) {
+    public ProductCompositeControllerImpl(final ServiceUtil serviceUtil, final ProductCompositeIntegration integration) {
         this.serviceUtil = serviceUtil;
         this.integration = integration;
-        this.productAggregateFactory = productAggregateFactory;
     }
 
     @Override
     public void createCompositeProduct(final ProductAggregate body) {
+
         try {
+
             LOG.debug("createCompositeProduct: creates a new composite entity for productId: {}", body.getProductId());
 
             final Product product = new Product(body.getProductId(), body.getName(), body.getWeight(), null);
@@ -72,19 +71,53 @@ public class ProductCompositeControllerImpl implements ProductCompositeControlle
         }
 
         final List<Recommendation> recommendations = integration.getRecommendations(productId);
+
         final List<Review> reviews = integration.getReviews(productId);
 
         LOG.debug("getCompositeProduct: aggregate entity found for productId: {}", productId);
 
-        return productAggregateFactory.create(product, recommendations, reviews, serviceUtil.getServiceAddress());
+        return createProductAggregate(product, recommendations, reviews, serviceUtil.getServiceAddress());
     }
 
     @Override
     public void deleteCompositeProduct(final int productId) {
+
         LOG.debug("deleteCompositeProduct: Deletes a product aggregate for productId: {}", productId);
+
         integration.deleteProduct(productId);
+
         integration.deleteRecommendations(productId);
+
         integration.deleteReviews(productId);
+
         LOG.debug("getCompositeProduct: aggregate entities deleted for productId: {}", productId);
+    }
+
+    private ProductAggregate createProductAggregate(final Product product, final List<Recommendation> recommendations, final List<Review> reviews, final String serviceAddress) {
+
+        // 1. Setup product info
+        final int productId = product.getProductId();
+        final String name = product.getName();
+        final int weight = product.getWeight();
+
+        // 2. Copy summary recommendation info, if available
+        final List<RecommendationSummary> recommendationSummaries = (recommendations == null) ? null :
+                recommendations.stream()
+                        .map(r -> new RecommendationSummary(r.getRecommendationId(), r.getAuthor(), r.getRate(), r.getContent()))
+                        .collect(Collectors.toList());
+
+        // 3. Copy summary review info, if available
+        final List<ReviewSummary> reviewSummaries = (reviews == null) ? null :
+                reviews.stream()
+                        .map(r -> new ReviewSummary(r.getReviewId(), r.getAuthor(), r.getSubject(), r.getContent()))
+                        .collect(Collectors.toList());
+
+        // 4. Create info regarding the involved microservices addresses
+        final String productAddress = product.getServiceAddress();
+        final String reviewAddress = (reviews != null && reviews.size() > 0) ? reviews.get(0).getServiceAddress() : "";
+        final String recommendationAddress = (recommendations != null && recommendations.size() > 0) ? recommendations.get(0).getServiceAddress() : "";
+        final ServiceAddresses serviceAddresses = new ServiceAddresses(serviceAddress, productAddress, reviewAddress, recommendationAddress);
+
+        return new ProductAggregate(productId, name, weight, recommendationSummaries, reviewSummaries, serviceAddresses);
     }
 }

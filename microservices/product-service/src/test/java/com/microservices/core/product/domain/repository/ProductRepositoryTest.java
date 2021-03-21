@@ -1,9 +1,7 @@
 package com.microservices.core.product.domain.repository;
 
-
 import com.microservices.core.product.domain.entity.ProductEntity;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +40,9 @@ public class ProductRepositoryTest {
         assertEqualsProduct(entity, savedEntity);
     }
 
+
     @Test
     public void create() {
-
         final ProductEntity newEntity = new ProductEntity(2, "n", 2);
         repository.save(newEntity);
 
@@ -78,7 +76,6 @@ public class ProductRepositoryTest {
         assertEqualsProduct(savedEntity, entity.get());
     }
 
-    @Disabled
     @Test
     public void duplicateError() {
         final ProductEntity entity = new ProductEntity(savedEntity.getProductId(), "n", 1);

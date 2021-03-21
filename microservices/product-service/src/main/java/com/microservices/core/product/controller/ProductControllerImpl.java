@@ -8,10 +8,10 @@ import com.microservices.core.product.domain.repository.ProductRepository;
 import com.microservices.util.exceptions.InvalidInputException;
 import com.microservices.util.exceptions.NotFoundException;
 import com.microservices.util.http.ServiceUtil;
-import com.mongodb.DuplicateKeyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

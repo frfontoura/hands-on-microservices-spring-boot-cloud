@@ -225,8 +225,7 @@ public class ProductCompositeIntegration implements ProductController, Recommend
         try {
             return mapper.readValue(ex.getResponseBodyAsString(), HttpErrorInfo.class).getMessage();
         } catch (final IOException ioex) {
-            return ex.getMessage();
+            return ioex.getMessage();
         }
     }
-
 }

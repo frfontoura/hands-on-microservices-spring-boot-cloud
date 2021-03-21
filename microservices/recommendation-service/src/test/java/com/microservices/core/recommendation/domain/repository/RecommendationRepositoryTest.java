@@ -2,7 +2,6 @@ package com.microservices.core.recommendation.domain.repository;
 
 import com.microservices.core.recommendation.domain.entity.RecommendationEntity;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
@@ -33,6 +33,7 @@ public class RecommendationRepositoryTest {
 
         assertEqualsRecommendation(entity, savedEntity);
     }
+
 
     @Test
     public void create() {
@@ -65,12 +66,10 @@ public class RecommendationRepositoryTest {
     @Test
     public void getByProductId() {
         final List<RecommendationEntity> entityList = repository.findByProductId(savedEntity.getProductId());
-
-        assertFalse(entityList.isEmpty());
+        assertEquals(entityList.size(), 1);
         assertEqualsRecommendation(savedEntity, entityList.get(0));
     }
 
-    @Disabled
     @Test
     public void duplicateError() {
         final RecommendationEntity entity = new RecommendationEntity(1, 2, "a", 3, "c");
